@@ -2,6 +2,7 @@
 // Created by danyal on 19.06.18.
 //
 
+#include <iostream>
 #include "Settings.h"
 
 Setting& Setting::Instance() {
@@ -11,12 +12,12 @@ Setting& Setting::Instance() {
 
 short Setting::getUDPPort() const noexcept
 {
-   _server_port_udp;
+   return _server_port_udp;
 }
 
 short Setting::getTCPPort() const noexcept
 {
-   _server_port_tcp;
+   return _server_port_tcp;
 }
 
 std::string Setting::getAddress() const noexcept
