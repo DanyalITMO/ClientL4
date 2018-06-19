@@ -1,39 +1,16 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <cstdio>
-#include <unistd.h>
+#include <iostream>
+#include "Helper.h"
+#include "ClientHelper.h"
+#include "Settings.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    int sock;
-    struct sockaddr_in addr;
+   parseArgs(argc, argv);
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    if(sock < 0)
-    {
-        perror("socket");
-//        exit(1);
-        return 1;
-    }
 
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(3425); // или любой другой порт...
-    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-    if(connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
-    {
-        perror("connect");
-        return 2;
-    }
+   auto client = makeClient(Setting::Instance().getProtocol());
+   client->send("55235");
+   std::cout << client->recv() << std::endl;
 
-    char message[] = "Hello there0123456789!\n";
-    char buf[1024];
-
-    send(sock, message, 1024, 0);
-    recv(sock, buf, 1024, 0);
-
-    printf(buf);
-    close(sock);
-
-    return 0;
+   return 0;
 }
